@@ -10,7 +10,6 @@ const Card = (props) => {
           />
         )}
       </picture>
-
       <h1 className="mt-4 mb-2 text-xl font-bold">{props.title}</h1>
       <p className="text-sm text-gray-600">{props.subtitle}</p>
     </div>

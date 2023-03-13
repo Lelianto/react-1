@@ -1,49 +1,49 @@
-import { useCallback, useEffect, useState } from "react";
-import Card from "src/components/Card";
-import HeaderSection from "src/components/Header";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useCallback, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { dummyProducts } from "src/utils/dummy";
+import { getUserData } from "src/store/apis";
+import { getUser } from "src/store/actions/user";
+import { getIsProductShow } from "src/store/actions/product";
+import PageLayout from "src/components/Layout";
+import ProductList from "src/components/Products";
 
 const Home = () => {
   const datas = dummyProducts;
-  const [showProduct, setShowProduct] = useState(false);
+  const dispatch = useDispatch();
+  const product = useSelector((state) => state.productReducer.showProduct);
+
+  const getUserProfile = async () => {
+    const response = await getUserData("Lelianto");
+    if (response.name) {
+      dispatch(getUser(response));
+    }
+  };
 
   useEffect(() => {
-    console.log(showProduct);
-  }, [showProduct]);
+    getUserProfile();
+  }, []);
 
   const handleShowProduct = useCallback(() => {
-    if (showProduct) {
-      setShowProduct(false);
+    if (product) {
+      dispatch(getIsProductShow(false));
     } else {
-      setShowProduct(true);
+      dispatch(getIsProductShow(true));
     }
-  }, [showProduct]);
+  }, [product]);
 
   return (
     <>
-      <HeaderSection showProduct={showProduct} />
-      <button
-        className="bg-black text-white rounded-lg px-4 py-2 my-8 ml-4"
-        type="button"
-        onClick={handleShowProduct}
-      >
-        {showProduct ? "Hide" : "Show"} Product
-      </button>
-      <div className="w-full container px-4 m-auto mt-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {datas.map((data, index) => {
-            return (
-              <div key={`product-${index}`}>
-                <Card
-                  image={data.image}
-                  title={data.title}
-                  subtitle={data.subtitle}
-                />
-              </div>
-            );
-          })}
-        </div>
-      </div>
+      <PageLayout>
+        <button
+          className="bg-black text-white rounded-lg px-4 py-2 my-8 ml-4"
+          type="button"
+          onClick={handleShowProduct}
+        >
+          {product ? "Hide" : "Show"} Product
+        </button>
+        <ProductList datas={datas} />
+      </PageLayout>
     </>
   );
 };

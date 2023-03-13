@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-const HeaderSection = () => {
+const FooterSection = () => {
   const user = useSelector((state) => state.userReducer.user);
   const product = useSelector((state) => state.productReducer);
 
   return (
-    <div className="w-full bg-rose-200 sticky top-0 z-50">
+    <div className="w-full bg-rose-200 sticky bottom-0 z-50">
       <div className="flex items-center p-4 container m-auto">
         <div className="font-bold">
           <Link to="/">Home</Link>
@@ -24,4 +24,4 @@ const HeaderSection = () => {
   );
 };
 
-export default HeaderSection;
+export default FooterSection;
